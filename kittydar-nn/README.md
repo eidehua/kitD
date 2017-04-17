@@ -1,8 +1,4 @@
-# kitD
-Detecting Male vs female cats using facial recognition
-
-
-## Kittydar Neural Network Instructions
+# Kittydar Neural Network Instructions
 
 #### Enter Kittydar NN directory
 ```bash
