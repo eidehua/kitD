@@ -1,0 +1,4 @@
+258
+WIRE
+Male, Adult
+http://www.adoptapet.com/pet/17960513-new-york-new-york-cat
