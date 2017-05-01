@@ -1,19 +1,21 @@
 %% Images
 % read images
 im_male = readFaceImages(fullfile('..','..','images','output-male'));
+% im_male = cat(4,im_male,readFaceImages(fullfile('..','..','images','[Adopt A Pet] Male')));
 im_female = readFaceImages(fullfile('..','..','images','output-female'));
+% im_female = cat(4,im_female,readFaceImages(fullfile('..','..','images','[Adopt A Pet] Female')));
 n = floor(size(im_male,4) * 0.8); % number of training data
 % set labels
 set_male = uint8(zeros(1,size(im_male,4)));     % 1: train 2:val 3:test uint8
 indexRan = randperm(size(im_male,4));
-set_male(indexRan(1:n)) = uint8(1);
-set_male(indexRan(n+1:end)) = uint8(2);
+set_male(indexRan(1:n)) = uint8(-1);
+set_male(indexRan(n+1:end)) = uint8(1);
 label_male = single(zeros(1,size(im_male,4)));
 % set labels
 set_female =  zeros(1,size(im_female,4));   % 1: train 2:val 3:test uint8
 indexRan = randperm(size(im_female,4));
-set_female(indexRan(1:n)) = uint8(1);
-set_female(indexRan(n+1:end)) = uint8(2);
+set_female(indexRan(1:n)) = uint8(-1);
+set_female(indexRan(n+1:end)) = uint8(1);
 label_female = single(ones(1,size(im_female,4))); %
 % concat 
 data = cat(4, im_male, im_female);
