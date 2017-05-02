@@ -8,7 +8,7 @@ for i = 1:numel(category)
     prediction_labels = prediction(index);
     
     for j = 1:numel(category)
-        confusionMatrix(i,j) = numel(find(prediction_labels == j));
+        confusionMatrix(i,j) = numel(find(prediction_labels == category(j)));
     end
 end
 confusionMatrix = 255*confusionMatrix/100 ;

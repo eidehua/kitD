@@ -2,15 +2,13 @@
 % either cnn_kitD('coarse') or cnn_kitD('fine')
 % coarse will classify the image into 20 catagories
 % fine will classify the image into 100 catagories
-function cnn_kitD(type,bs,lr,ne, varargin)
+function cnn_kitD(type, varargin)
 
 if ~(strcmp(type, 'fine') || strcmp(type, 'coarse')) 
     error('The argument has to be either fine or coarse');
 end
 
-batchSize = bs;
-learningRate = lr;
-numEpochs = ne;
+
 
 
 % record the time
@@ -26,19 +24,19 @@ opts.expDir = fullfile('kitData') ;
 % image database
 opts.imdbPath = fullfile(opts.expDir, 'imdb.mat');
 % set up the batch size (split the data into batches)
-opts.train.batchSize = batchSize ;
+opts.train.batchSize = 10 ;
 % number of Epoch (iterations)
-opts.train.numEpochs = numEpochs ;
+opts.train.numEpochs = 100 ;
 % resume the train
 opts.train.continue = true ;
 % use the GPU to train
 opts.train.useGpu = false ;
 % set the learning rate
-opts.train.learningRate = [learningRate*ones(1, 10) 0.1*learningRate*ones(1,15)] ;
+opts.train.learningRate = [0.001 * ones(1, 10) 0.0005*ones(1,10)] ;
 % set weight decay
 opts.train.weightDecay = 0.0005 ;
 % set momentum
-opts.train.momentum = 0.9 ;
+opts.train.momentum = 0.5 ;
 % experiment result directory
 opts.train.expDir = opts.expDir ;
 % parse the varargin to opts. 
@@ -96,10 +94,19 @@ net.layers{end+1} = struct('type', 'pool', ...
 net.layers{end+1} = struct('type', 'relu','leak',0) ;                     
 
 % 7 dropout layer
-net.layers{end+1} = struct('type', 'dropout', 'rate', 0.9);
+net.layers{end+1} = struct('type', 'dropout', 'rate', 0.5);
+
+% 4 conv2
+net.layers{end+1} = struct('type', 'conv', ...
+                           'weights', {{0.001*randn(76,76,64,1, 'single'), zeros(1, 1, 'single')}}, ...
+                           'learningRate',[1,2],...
+                           'dilate', 1, ...
+                           'stride', 1, ...
+                           'pad', 0,...
+                           'opts',{{}}) ;
 
 % 8 loss
-net.layers{end+1} = struct('type', 'softmaxloss') ;
+net.layers{end+1} = struct('type', 'softmax') ;
 
 
 % --------------------------------------------------------------------
@@ -112,7 +119,7 @@ if opts.train.useGpu
   imdb.images.data = gpuArray(imdb.images.data) ;
 end
 %% display the net
-vl_simplenn_display(net);
+vl_simplenn_display(net, 'inputSize', [385 385 3 opts.train.batchSize]);
 %% start training
 [net,info] = cnn_train_kitD(net, imdb, @getBatch, ...
     opts.train, ...

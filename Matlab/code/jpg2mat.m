@@ -1,4 +1,5 @@
 %% Images
+mkdir kitData
 % read images
 im_male = readFaceImages(fullfile('..','..','images','output-male'));
 im_female = readFaceImages(fullfile('..','..','images','output-female'));
