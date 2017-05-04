@@ -338,6 +338,8 @@ switch opts.errorType
     error = bsxfun(@times, predictions, labels) < 0 ;
     error = squeeze(predictions)' .* labels < 0;
     info.error(end) = info.error(end) + sum(error(:))/n ;
+    prediction_class = predictions(:,:,1,:);
+    prediction_class = reshape(prediction_class,[numel(prediction_class),1]);
     
 end
 

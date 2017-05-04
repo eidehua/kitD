@@ -1,4 +1,4 @@
-% jpg2mat
+%jpg2mat
 cnn_kitD('fine')
 
 

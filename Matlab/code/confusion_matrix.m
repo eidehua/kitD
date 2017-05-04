@@ -3,6 +3,7 @@ function confusionMatrix = confusion_matrix(groundtruth , prediction)
 category = unique(groundtruth);
 
 confusionMatrix = zeros(numel(category) , numel(category)) ;
+error = bsxfun(@times, prediction, ones(size(prediction,1),1)) >= 0 ;
 for i = 1:numel(category)
     index = find(groundtruth == category(i)) ; 
     prediction_labels = prediction(index);

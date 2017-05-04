@@ -26,11 +26,11 @@ opts.imdbPath = fullfile(opts.expDir, 'imdb.mat');
 % set up the batch size (split the data into batches)
 opts.train.batchSize = 10 ;
 % number of Epoch (iterations)
-opts.train.numEpochs = 100 ;
+opts.train.numEpochs = 12 ;
 % resume the train
 opts.train.continue = true ;
 % use the GPU to train
-opts.train.useGpu = false ;
+opts.train.useGpu = true ;
 % set the learning rate
 opts.train.learningRate = [0.001 * ones(1, 10) 0.0005*ones(1,10)] ;
 % set weight decay
@@ -98,7 +98,7 @@ net.layers{end+1} = struct('type', 'dropout', 'rate', 0.5);
 
 % 4 conv2
 net.layers{end+1} = struct('type', 'conv', ...
-                           'weights', {{0.001*randn(76,76,64,1, 'single'), zeros(1, 1, 'single')}}, ...
+                           'weights', {{0.001*randn(43,43,64,1, 'single'), zeros(1, 1, 'single')}}, ...
                            'learningRate',[1,2],...
                            'dilate', 1, ...
                            'stride', 1, ...
@@ -119,7 +119,7 @@ if opts.train.useGpu
   imdb.images.data = gpuArray(imdb.images.data) ;
 end
 %% display the net
-vl_simplenn_display(net, 'inputSize', [385 385 3 opts.train.batchSize]);
+vl_simplenn_display(net, 'inputSize', [256 256 3 opts.train.batchSize]);    % orig 385 385
 %% start training
 [net,info] = cnn_train_kitD(net, imdb, @getBatch, ...
     opts.train, ...
@@ -137,7 +137,7 @@ fclose(fid);
 ID = 1:numel(info.test.prediction_class);
 dlmwrite('kitD_prediction.csv',[ID', info.test.prediction_class], '-append');
 
-val_groundtruth = images.labels(45001:end);
+val_groundtruth = images.labels(find(images.set == 2));  %images.labels(45001:end);
 val_prediction = info.val.prediction_class;
 val_confusionMatrix = confusion_matrix(val_groundtruth , val_prediction);
 cmp = jet(50);
@@ -174,7 +174,7 @@ if set == 1 % training
 %     im = imnoise(im,'gaussian',0,5);
     % random crop
     if rand > 0.5
-    	im = ranCrop(im);
+    	%im = ranCrop(im);
     end 
     % and other data augmentation
 end
