@@ -30,7 +30,7 @@ opts.train.numEpochs = 30 ;
 % resume the train
 opts.train.continue = true ;
 % use the GPU to train
-opts.train.useGpu = false ;
+opts.train.useGpu = true ;
 % set the learning rate
 opts.train.learningRate = [0.001 * ones(1, 10) 0.0005*ones(1,10)] ;
 % set weight decay

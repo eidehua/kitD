@@ -2,7 +2,10 @@
 mkdir kitData
 % read images
 im_male = readFaceImages(fullfile('..','..','images','output-male'));
+im_male = cat(4,im_male,readFaceImages(fullfile('..','..','images','[Adopt A Pet] Male')));
+
 im_female = readFaceImages(fullfile('..','..','images','output-female'));
+im_female = cat(4,im_female,readFaceImages(fullfile('..','..','images','[Adopt A Pet] Female')));
 
 
 %% split train set and val set

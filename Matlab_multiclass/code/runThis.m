@@ -1,5 +1,5 @@
-%jpg2mat
-mat2binary
+% jpg2mat
+% mat2binary
 cnn_kitD('fine')
 
 

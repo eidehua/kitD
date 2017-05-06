@@ -1,5 +1,5 @@
 function [im] = readFaceImages(imdir)
-    imagesize = 256;
+    imagesize = 32;
     function [imo] = crop(im,imagesize)
         [x, y, ~, fig] = size(im);
         if x~= imagesize 
