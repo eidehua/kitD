@@ -30,7 +30,7 @@ opts.train.numEpochs = 30 ;
 % resume the train
 opts.train.continue = true ;
 % use the GPU to train
-opts.train.useGpu = true ;
+opts.train.useGpu = false ;
 % set the learning rate
 opts.train.learningRate = [0.001 * ones(1, 10) 0.0005*ones(1,10)] ;
 % set weight decay
@@ -94,7 +94,7 @@ net.layers{end+1} = struct('type', 'pool', ...
 net.layers{end+1} = struct('type', 'relu','leak',0) ;                     
 
 % 7 dropout layer
-net.layers{end+1} = struct('type', 'dropout', 'rate', 0.1);
+net.layers{end+1} = struct('type', 'dropout', 'rate', 0.5);
 
 % 4 conv2
 net.layers{end+1} = struct('type', 'conv', ...

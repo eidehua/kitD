@@ -1,7 +1,7 @@
 %% Images
 mkdir kitData
 % read images
-load('/Users/hoho/Documents/CourseSpring17/CS543_CV/cs543/hw5/computer_vision_MP/code/cifar_data/cifar-baseline/imdb.mat')
+load('./cifarData/imdb.mat')
 im_0 = images.data(:,:,:,find(images.labels == 80));
 im_1 = images.data(:,:,:,find(images.labels == 1));
 im_2 = images.data(:,:,:,find(images.labels == 20));

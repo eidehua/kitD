@@ -1,3 +1,5 @@
 *.DS_Store
 npm-debug.log
 node_modules
+*.mexw64
+Matlab_multiclass/code/kitData/
