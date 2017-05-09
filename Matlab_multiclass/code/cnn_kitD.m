@@ -24,15 +24,16 @@ opts.expDir = fullfile('kitData') ;
 % image database
 opts.imdbPath = fullfile(opts.expDir, 'imdb.mat');
 % set up the batch size (split the data into batches)
-opts.train.batchSize = 10 ;
+opts.train.batchSize = 50;
 % number of Epoch (iterations)
-opts.train.numEpochs = 30 ;
+opts.train.numEpochs = 55 ;
 % resume the train
 opts.train.continue = true ;
 % use the GPU to train
 opts.train.useGpu = false ;
 % set the learning rate
-opts.train.learningRate = [0.001 * ones(1, 10) 0.0005*ones(1,10)] ;
+opts.train.learningRate = [0.001 * ones(1, 10) 0.0005*ones(1,10), 0.0001*ones(1,15), 0.00005*ones(1,10), 0.00001*ones(1,10)] ;
+%0.02, 0.001, 0.005*ones(1,5), 0.0005*ones(1,5), 0.0001*ones(1,10), 0.00005*ones(1,10)
 % set weight decay
 opts.train.weightDecay = 0.0005 ;
 % set momentum
@@ -167,8 +168,15 @@ im = imdb.images.data(:,:,:,batch) ;
 % data augmentation
 if set == 1 % training
     % fliplr
-    if rand > 0.5
-        im = flip(im ,2);
+    for t = 1:size(im,4)
+        randnum = rand();
+        if randnum > 0.5
+            if rand() > 0.7
+                im(:,:,:,t) = fliplr(im(:,:,:,t));
+            else
+                im(:,:,:,t) = flipud(im(:,:,:,t));
+            end
+        end
     end
     % noise
 %     im = imnoise(im,'gaussian',0,5);

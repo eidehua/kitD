@@ -14,6 +14,7 @@ set_male = uint8(zeros(1,size(im_male,4)));     % 1: train 2:val 3:test uint8
 indexRan = randperm(size(im_male,4));
 set_male((1:n)) = uint8(1);
 set_male((n+1:end)) = uint8(2);
+
 %% set labels
 label_male = single(2 * ones(1,size(im_male,4)));
 %% split train set and val set
@@ -21,11 +22,17 @@ set_female =  zeros(1,size(im_female,4));   % 1: train 2:val 3:test uint8
 indexRan = randperm(size(im_female,4));
 set_female((1:n)) = uint8(1);
 set_female((n+1:end)) = uint8(2);
+
 %% set labels
 label_female = single(ones(1,size(im_female,4))); %
 % concat 
 data = cat(4, im_male, im_female);
 data_mean = mean(data,4);
+tic
+for i = 1:size(data,4)
+    data(:,:,:,i) = data(:,:,:,i) - data_mean;
+end
+toc
 set = cat(2,set_male,set_female);
 labels = cat(2,label_male,label_female);
 %% randomly place the imgs
