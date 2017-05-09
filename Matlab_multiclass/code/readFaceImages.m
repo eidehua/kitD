@@ -16,7 +16,7 @@ function [im] = readFaceImages(imdir)
     im = single(zeros(imagesize,imagesize,3,numel(files)));
     for f = 1:numel(files)
         fn = files(f).name;
-        im(:,:,:,f) = crop(im2single(imread(fullfile(imdir, fn))),imagesize);
+        im(:,:,:,f) = crop((imread(fullfile(imdir, fn))),imagesize);
     end
 end
 
