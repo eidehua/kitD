@@ -24,15 +24,15 @@ opts.expDir = fullfile('kitData') ;
 % image database
 opts.imdbPath = fullfile(opts.expDir, 'imdb.mat');
 % set up the batch size (split the data into batches)
-opts.train.batchSize = 50;
+opts.train.batchSize = 10;
 % number of Epoch (iterations)
-opts.train.numEpochs = 100 ;
+opts.train.numEpochs = 150 ;
 % resume the train
 opts.train.continue = true ;
 % use the GPU to train
 opts.train.useGpu = false ;
 % set the learning rate
-opts.train.learningRate = [0.001 * ones(1, 20) 0.0005*ones(1,20), 0.0001*ones(1,20), 0.00005*ones(1,10), 0.00001*ones(1,55)] ;
+opts.train.learningRate = [0.001 * ones(1, 20) 0.0008 * ones(1, 20) 0.0005*ones(1,20), 0.0001*ones(1,20), 0.00005*ones(1,20), 0.00001*ones(1,55)] ;
 % opts.train.learningRate = [0.001 * ones(1, 10) 0.0005*ones(1,10), 0.0001*ones(1,20), 0.00005*ones(1,10), 0.00001*ones(1,55)] ;
 % set weight decay
 opts.train.weightDecay = 0.0005 ;
@@ -95,7 +95,7 @@ net.layers{end+1} = struct('type', 'pool', ...
 net.layers{end+1} = struct('type', 'relu','leak',0) ;                     
 
 % 7 dropout layer
-net.layers{end+1} = struct('type', 'dropout', 'rate', 0.7);
+net.layers{end+1} = struct('type', 'dropout', 'rate', 0.8);
 
 % 4 conv2
 net.layers{end+1} = struct('type', 'conv', ...
@@ -165,27 +165,31 @@ function [imo] = ranCrop(im)
 function [im, labels] = getBatch(imdb, batch , set)
 % --------------------------------------------------------------------
 im = imdb.images.data(:,:,:,batch) ;
+batchSize = size(im, 3);
 % data augmentation
 if set == 1 % training
     % fliplr
-    for t = 1:size(im,4)
-        randnum = rand();
-        if randnum > 0.5
-            if rand() > 0.7
-                im(:,:,:,t) = fliplr(im(:,:,:,t));
-            else
-                im(:,:,:,t) = flipud(im(:,:,:,t));
-            end
-        end
-    end
+%     for t = 1:size(im,4)
+%         randnum = rand();
+%         if randnum > 0.5
+%             if rand() > 0.7
+%                 im(:,:,:,t) = fliplr(im(:,:,:,t));
+%             else
+%                 im(:,:,:,t) = flipud(im(:,:,:,t));
+%             end
+%         end
+%     end
     % noise
-%     im = imnoise(im,'gaussian',0,5);
+%      im = imnoise(im,'gaussian',0,5);
     % random crop
     if rand > 0.5
         im = flip(im, 2);
     	%im = ranCrop(im);
     end 
     % and other data augmentation
+%     G = single(ones(batchSize, 1));
+%     B = single(zeros(batchSize, 1));
+%     im = vl_nnbnorm(im, G, B);
 end
 
 
