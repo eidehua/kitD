@@ -26,14 +26,14 @@ opts.imdbPath = fullfile(opts.expDir, 'imdb.mat');
 % set up the batch size (split the data into batches)
 opts.train.batchSize = 50;
 % number of Epoch (iterations)
-opts.train.numEpochs = 55 ;
+opts.train.numEpochs = 100 ;
 % resume the train
 opts.train.continue = true ;
 % use the GPU to train
 opts.train.useGpu = false ;
 % set the learning rate
-opts.train.learningRate = [0.001 * ones(1, 10) 0.0005*ones(1,10), 0.0001*ones(1,15), 0.00005*ones(1,10), 0.00001*ones(1,10)] ;
-%0.02, 0.001, 0.005*ones(1,5), 0.0005*ones(1,5), 0.0001*ones(1,10), 0.00005*ones(1,10)
+opts.train.learningRate = [0.001 * ones(1, 20) 0.0005*ones(1,20), 0.0001*ones(1,20), 0.00005*ones(1,10), 0.00001*ones(1,55)] ;
+% opts.train.learningRate = [0.001 * ones(1, 10) 0.0005*ones(1,10), 0.0001*ones(1,20), 0.00005*ones(1,10), 0.00001*ones(1,55)] ;
 % set weight decay
 opts.train.weightDecay = 0.0005 ;
 % set momentum
@@ -95,11 +95,11 @@ net.layers{end+1} = struct('type', 'pool', ...
 net.layers{end+1} = struct('type', 'relu','leak',0) ;                     
 
 % 7 dropout layer
-net.layers{end+1} = struct('type', 'dropout', 'rate', 0.5);
+net.layers{end+1} = struct('type', 'dropout', 'rate', 0.7);
 
 % 4 conv2
 net.layers{end+1} = struct('type', 'conv', ...
-                           'weights', {{0.001*randn(4,4,32,2, 'single'), zeros(1, 2, 'single')}}, ...
+                           'weights', {{0.001*randn(20,20,32,2, 'single'), zeros(1, 2, 'single')}}, ...
                            'learningRate',[1,2],...
                            'dilate', 1, ...
                            'stride', 1, ...
@@ -182,6 +182,7 @@ if set == 1 % training
 %     im = imnoise(im,'gaussian',0,5);
     % random crop
     if rand > 0.5
+        im = flip(im, 2);
     	%im = ranCrop(im);
     end 
     % and other data augmentation
