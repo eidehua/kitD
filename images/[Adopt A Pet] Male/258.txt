@@ -1,4 +1,4 @@
 258
-WIRE
+TT
 Male, Adult
-http://www.adoptapet.com/pet/17960513-new-york-new-york-cat
+http://www.adoptapet.com/pet/18009177-new-york-new-york-cat
