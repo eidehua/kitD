@@ -24,7 +24,7 @@ opts.expDir = fullfile('kitData') ;
 % image database
 opts.imdbPath = fullfile(opts.expDir, 'imdb.mat');
 % set up the batch size (split the data into batches)
-opts.train.batchSize = 10 ; %% orig: 100
+opts.train.batchSize = 50 ; %% orig: 100
 % number of Epoch (iterations)
 opts.train.numEpochs = 112; %%103 ; %% orig: 25
 % resume the train
@@ -32,7 +32,7 @@ opts.train.continue = true ;
 % use the GPU to train
 opts.train.useGpu = true ;
 % set the learning rate
-opts.train.learningRate = [0.002, 0.01, 0.02, 0.04 * ones(1,10), 0.004 * ones(1,10), 0.0004 * ones(1,20), 0.0002 * ones(1,20), 0.00001 * ones(1,40)];
+opts.train.learningRate = [0.001 * ones(1, 20) 0.0008 * ones(1, 20) 0.0005*ones(1,20), 0.0001*ones(1,20), 0.00005*ones(1,20), 0.00001*ones(1,55)] ;
 % set weight decay
 opts.train.weightDecay = 0.0005 ;
 % set momentum
@@ -93,7 +93,7 @@ net.layers{end+1} = struct('name', 'pool1', ...
                            'stride', 2, ...
                            'pad', 0, ...
                            'opts',{{}}) ;
-net.layers{end+1} = struct('type', 'dropout', 'name', 'dropout1', 'rate', 0.5) ;
+net.layers{end+1} = struct('type', 'dropout', 'name', 'dropout1', 'rate', 0.8) ;
 
 % Block 2
 net.layers{end+1} = struct('type', 'conv', ...
@@ -139,7 +139,7 @@ net.layers{end+1} = struct('name', 'pool2', ...
                            'stride', 2, ...
                            'pad', 0, ...
                            'opts',{{}}) ;
-net.layers{end+1} = struct('type', 'dropout', 'name', 'dropout2', 'rate', 0.55) ;
+net.layers{end+1} = struct('type', 'dropout', 'name', 'dropout2', 'rate', 0.8) ;
 
 
 % Block 3
@@ -177,7 +177,7 @@ net.layers{end+1} = struct('name', 'pool3', ...
                            'stride', 2, ...
                            'pad', 0, ...
                            'opts',{{}}) ;
-net.layers{end+1} = struct('type', 'dropout', 'name', 'dropout2', 'rate', 0.55) ;
+net.layers{end+1} = struct('type', 'dropout', 'name', 'dropout2', 'rate', 0.8) ;
 
 
 
@@ -202,7 +202,7 @@ net.layers{end+1} = struct('type', 'conv', ...
 net.layers{end+1} = struct('type', 'relu', 'name', 'relu_cccp5', 'leak', 0) ;
 net.layers{end+1} = struct('type', 'conv', ...
                            'name', 'cccp6', ...
-                           'weights', {init_weights(1,192,2)}, ...
+                           'weights', {init_weights(9,192,2)}, ...
                            'learningRate', 0.001*lr, ...
                            'dilate', 1, ...
                            'stride', 1, ...
@@ -280,20 +280,21 @@ im = imdb.images.data(:,:,:,batch) ;
 % data augmentation
 if set == 1 % training
     % fliplr
-    for t = 1:size(im,4)
-        randnum = rand();
-        if randnum > 0.5
-            if rand() > 0.7
-                im(:,:,:,t) = fliplr(im(:,:,:,t));
-            else
-                im(:,:,:,t) = flipud(im(:,:,:,t));
-            end
-        end
-    end
+%     for t = 1:size(im,4)
+%         randnum = rand();
+%         if randnum > 0.5
+%             if rand() > 0.7
+%                 im(:,:,:,t) = fliplr(im(:,:,:,t));
+%             else
+%                 im(:,:,:,t) = flipud(im(:,:,:,t));
+%             end
+%         end
+%     end
     % noise
 %     im = imnoise(im,'gaussian',0,5);
     % random crop
     if rand > 0.5
+        im = flip(im, 2);
     	%im = ranCrop(im);
     end 
     % and other data augmentation

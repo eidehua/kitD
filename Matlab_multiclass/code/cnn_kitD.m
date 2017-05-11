@@ -24,16 +24,21 @@ opts.expDir = fullfile('kitData') ;
 % image database
 opts.imdbPath = fullfile(opts.expDir, 'imdb.mat');
 % set up the batch size (split the data into batches)
-opts.train.batchSize = 10;
+opts.train.batchSize = 5;
 % number of Epoch (iterations)
-opts.train.numEpochs = 150 ;
+opts.train.numEpochs = 70 ;
 % resume the train
 opts.train.continue = true ;
 % use the GPU to train
-opts.train.useGpu = false ;
+opts.train.useGpu = true ;
 % set the learning rate
-opts.train.learningRate = [0.001 * ones(1, 20) 0.0008 * ones(1, 20) 0.0005*ones(1,20), 0.0001*ones(1,20), 0.00005*ones(1,20), 0.00001*ones(1,55)] ;
-% opts.train.learningRate = [0.001 * ones(1, 10) 0.0005*ones(1,10), 0.0001*ones(1,20), 0.00005*ones(1,10), 0.00001*ones(1,55)] ;
+opts.train.learningRate = [0.001 * ones(1, 20) 0.0001 * ones(1, 20) 0.00005*ones(1,15), 0.00001*ones(1,8) 0.000001*ones(1,4) 0.00000005*ones(1,3)] ;
+% basic error 35 (epochs 70, batch size 5)
+% opts.train.learningRate = [0.001 * ones(1, 20) 0.0001 * ones(1, 20) 0.00005*ones(1,15), 0.00001*ones(1,8) 0.000001*ones(1,4) 0.00000005*ones(1,3)] ;
+% basic error 36 (epochs 80, batch size 20)
+% opts.train.learningRate = [0.001 * ones(1, 20) 0.0005 * ones(1, 20) 0.0001*ones(1,20), 0.00003*ones(1,8) 0.000015*ones(1,12)] ;
+% basic error 36 (epochs 85, batch size 10)
+% opts.train.learningRate = [0.001 * ones(1, 20) 0.0008 * ones(1, 20) 0.0005*ones(1,20), 0.0003*ones(1,25)] ;
 % set weight decay
 opts.train.weightDecay = 0.0005 ;
 % set momentum
